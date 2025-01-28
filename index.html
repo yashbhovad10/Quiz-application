@@ -1,0 +1,141 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            color: #333;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        label {
+            display: block;
+            margin: 8px 0;
+            font-size: 16px;
+        }
+
+        input[type="radio"] {
+            margin-right: 10px;
+        }
+
+        #submitBtn {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        #submitBtn:hover {
+            background-color: #45a049;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Quiz on Web Technologies</h1>
+    <form action="" id="myform"></form>
+    <button id="submitBtn" type="button">Submit</button> 
+    <div id="result"></div> 
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+        integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <script>
+        let Questions = [
+            { ques: "What is HTML?", option: ["Hypertext Markup Language", "PHP", "Python", "SQL"], answer: "Hypertext Markup Language" },
+            { ques: "What is CSS?", option: ["Cascading Style Sheets", "HTML", "Python", "Java"], answer: "Cascading Style Sheets" },
+            { ques: "What is JavaScript?", option: ["Scripting Language", "Database", "Operating System", "Framework"], answer: "Scripting Language" },
+            { ques: "What does DOM stand for?", option: ["Document Object Model", "Data Object Model", "Document Online Model", "Data Oriented Model"], answer: "Document Object Model" },
+            { ques: "What is jQuery?", option: ["JavaScript Library", "Programming Language", "Text Editor", "Database"], answer: "JavaScript Library" },
+            { ques: "What is a variable?", option: ["Container for storing data", "Function", "Object", "Array"], answer: "Container for storing data" },
+            { ques: "What is the correct way to link an external CSS file?", option: ["<link href='style.css'>", "<link rel='stylesheet' href='style.css'>", "<style src='style.css'>", "<css src='style.css'>"], answer: "<link rel='stylesheet' href='style.css'>" },
+            { ques: "What does the 'alert()' function do in JavaScript?", option: ["Shows a message in a pop-up box", "Creates a variable", "Defines a function", "Creates a new object"], answer: "Shows a message in a pop-up box" },
+            { ques: "Which of these is used to declare a constant in JavaScript?", option: ["let", "const", "var", "def"], answer: "const" },
+            { ques: "Which of these is the correct syntax for a JavaScript function?", option: ["function myFunction()", "function = myFunction()", "def myFunction()", "function:myFunction()"], answer: "function myFunction()" },
+            { ques: "Which of the following is not a valid HTML tag?", option: ["<section>", "<article>", "<div>", "<content>"], answer: "<content>" },
+            { ques: "What does CSS stand for?", option: ["Cascading Style Sheets", "Computer Style Sheets", "Creative Style Sheets", "Coded Style Sheets"], answer: "Cascading Style Sheets" },
+            { ques: "Which of the following is used for styling web pages?", option: ["JavaScript", "HTML", "CSS", "PHP"], answer: "CSS" },
+            { ques: "How do you add a comment in HTML?", option: ["// comment", "/* comment */", "<!-- comment -->", "# comment"], answer: "<!-- comment -->" },
+            { ques: "Which of these is a valid JavaScript event?", option: ["onclick", "onmouseover", "onkeydown", "All of the above"], answer: "All of the above" },
+            { ques: "Which of the following is used for creating a list in HTML?", option: ["<ul>", "<ol>", "<li>", "All of the above"], answer: "All of the above" },
+            { ques: "What does the 'this' keyword refer to in JavaScript?", option: ["The current function", "The current object", "The window object", "The document object"], answer: "The current object" },
+            { ques: "Which of the following is used for looping in JavaScript?", option: ["for", "while", "do-while", "All of the above"], answer: "All of the above" },
+            { ques: "What does a JavaScript array store?", option: ["Strings", "Numbers", "Objects", "All of the above"], answer: "All of the above" },
+            { ques: "What does the 'return' statement do in a function?", option: ["Exits the function", "Returns a value", "Both a and b", "None of the above"], answer: "Both a and b" }
+        ];
+
+        function AddQuestions() {
+            let addhtml = "";
+
+            Questions.forEach((value, index) => {
+                addhtml += `
+                <div class="container">
+                    <h2>${value.ques}</h2>
+                    ${value.option.map((v, i) => {
+                        return `
+                            <label for="question${index}_option${i}">
+                                <input type="radio" id="question${index}_option${i}" name="question${index}" value="${v}"> ${v}
+                            </label><br>
+                        `;
+                    }).join(" ")}
+                </div>
+                `;
+            });
+
+            $("#myform").html(addhtml);
+        }
+
+        function calculatescore() {
+            let score = 0;
+
+            Questions.forEach((value, index) => {
+                let selectedOption = $(`input[name="question${index}"]:checked`).val();
+                if (selectedOption === value.answer) {
+                    score++;
+                }
+            });
+
+            $("#result").html(`Your score is: ${score} / ${Questions.length}`);
+        }
+
+        $(document).ready(function () {
+            AddQuestions();
+
+            $("#submitBtn").on("click", function () {
+                calculatescore();
+            });
+        });
+    </script>
+</body>
+
+</html>
